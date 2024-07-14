@@ -1,0 +1,14 @@
+[Unit]
+Description=slackbot script
+After=multi-user.target
+
+[Service]
+User=ylabslackbot
+Group=ylabslackbot
+WorkingDirectory=/home/ylabslackbot/ylab-slackbot
+Environment="PATH=/home/ylabslackbot/ylab-slackbot/.env/bin"
+ExecStart=/home/ylabslackbot/ylab-slackbot/.env/bin/python3 /home/ylabslackbot/ylab-slackbot/slackbot_server.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,104 @@
+version: '3.8'
+
+x-global-env: &global-env
+ env_file:
+    - .env
+
+services:
+  #BreakerBot
+  mosquitto:
+    container_name: mqtt
+    restart: always
+    image: eclipse-mosquitto:2
+    ports:
+      - 1883:1883
+      - 8883:8883
+      - 9001:9001
+    volumes:
+      - ./ylab-breakerbot/mosquitto/config:/mosquitto/config
+      - ./ylab-breakerbot/mosquitto/data:/mosquitto/data
+      - ./ylab-breakerbot/mosquitto/log:/mosquitto/log
+    networks:
+      - ylab-bot-network
+
+  breakerbot-server:
+    container_name: breakerbot
+    restart: always
+    build: ./ylab-breakerbot/breaker-bot
+    networks:
+      - ylab-bot-network
+    environment:
+      - SLACK_API_TOKEN: ${SLACK_API_TOKEN}
+    # expose:
+    #   - 1883
+
+  #Souji-Bot
+  soujibot:
+    build: ./ylab-soujibot
+    environment:
+      - SLACK_API_TOKEN: ${SLACK_API_TOKEN}
+    networks:
+      - ylab-bot-network
+
+  # Minnadoko
+  frontend-react-js:
+    container_name: frontend
+    restart: always
+    # env_file:
+    #   - frontend-react-js.env
+    build: ./minnadoko/frontend
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+      TOKEN: ${TOKEN}
+    ports:
+      - "80:5173"
+    networks:
+      - ylab-bot-network
+
+  backend:
+    container_name: backend
+    restart: always
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: ${PGRST_DB_URI}
+      PGRST_OPENAPI_SERVER_PROXY_URI: ${PGRST_OPENAPI_SERVER_PROXY_URI}
+      PGRST_JWT_SECRET: ${PGRST_JWT_SECRET}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS} 
+    depends_on:
+      - db
+    networks:
+      - ylab-bot-network
+
+  point-counter-backend:
+    depends_on:
+      - db
+    container_name: point-counter-backend
+    restart: always
+    build: ./minnadoko/point-counter-backend
+    environment:
+      DB_URL: ${DB_URL}
+    networks:
+      - ylab-bot-network
+
+  db:
+    container_name: db
+    image: postgres:16.0-alpine3.18
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      # POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: password
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    networks:
+      - ylab-bot-network
+    volumes:
+      - ./minnadoko/postgres/data:/var/lib/postgresql/data
+
+networks:
+    ylab-bot-network:
+        name: ylab-bot-network
+        driver: bridge

@@ -1,0 +1,16 @@
+{
+  "name": "point-counter-backend",
+  "version": "1.0.0",
+  "description": "point-counter-backend for minnadoko",
+  "main": "index.js",
+  "scripts": {
+    "db": "node db.js",
+    "main": "node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "postgres": "^3.4.3"
+  },
+  "type": "module"
+}

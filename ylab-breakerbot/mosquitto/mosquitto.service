@@ -1,0 +1,17 @@
+[Unit]
+Description=MQTT Broker
+After=network-online.target
+
+[Service]
+ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+User=mosquitto
+Group=mosquitto
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -m 740 -p /var/run/mosquitto
+ExecStartPre=/bin/chown mosquitto:mosquitto /var/run/mosquitto
+ExecStartPre=/bin/sleep 30
+PIDFile=/var/run/mosquitto.pid
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+node_modules
+minnadoko/postgres/data/*
+
+.env
