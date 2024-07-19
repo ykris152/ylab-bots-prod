@@ -14,7 +14,9 @@ Send slack reminder every week for the person in charge of cleaning up the lab.
 # Running this app
 1. Install [docker](https://docs.docker.com/engine/install/) in any environment.
 2. git clone this repo ```git clone https://github.com/ykris152/ylab-bots.git```
-3. make your own <code>.env</code> file \
+3. <code>sudo apt update</code>
+4. <code>sudo apt install postgresql-client</code>
+5. make your own <code>.env</code> file \
 the <code>.env</code>> should include a these:
 ```
 # breakerbot & soujibot
@@ -35,8 +37,8 @@ POSTGRES_PASSWORD=<password for postgres>
 ```
 for jwt token & secret key refer to [this](https://postgrest.org/en/v12/references/auth.html). (If you have time please implement [External JWT Generation](https://postgrest.org/en/v12/integrations/jwt_gen.html))
 
-4. compose up the apps ```docker compose up -d```
-5. Once the deployment of containers are finished, run a setup script for the db. \
+6. compose up the apps ```docker compose up -d```
+7. Once the deployment of containers are finished, run a setup script for the db. \
 <code>./minnadoko/postgres/bin/setup.sh</code> \
 modifiy the schema <code>minnadoko/postgres/sql/schema.sql</code> \
 and modify the seed <code>minnadoko/postgres/sql/seed.sql</code> \
