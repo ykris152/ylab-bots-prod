@@ -37,9 +37,9 @@ for jwt token & secret key refer to [this](https://postgrest.org/en/v12/referenc
 
 4. compose up the apps ```docker compose up -d```
 5. Once the deployment of containers are finished, run a setup script for the db. \
-<code>./minnadoko\postgres\bin\setup.sh</code> \
-modifiy the schema <code>minnadoko\postgres\sql\schema.sql</code> \
-and modify the seed <code>minnadoko\postgres\sql\seed.sql</code> \
+<code>./minnadoko/postgres/bin/setup.sh</code> \
+modifiy the schema <code>minnadoko/postgres/sql/schema.sql</code> \
+and modify the seed <code>minnadoko/postgres/sql/seed.sql</code> \
 for your use case.
 
 # Architecture
